@@ -1,8 +1,11 @@
 package learning.web.springboot.controller;
 
+import learning.web.springboot.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,9 +19,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-  @RequestMapping("/login")
-  public String login(@RequestParam String name, ModelMap modelMap) {
-    modelMap.put("name", name);
+  @Autowired
+  private LoginService loginService;
+
+  @RequestMapping(value = "/login", method = RequestMethod.GET)
+  public String showLogin(ModelMap modelMap) {
     return "login";
+  }
+
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  public String showWelcomePage(ModelMap modelMap, @RequestParam String name, @RequestParam String password) {
+    if(loginService.validate(name, password)) {
+      modelMap.put("name", name);
+      return "welcome";
+    } else {
+      modelMap.put("error", "Your username or password is incorrect.");
+      return "login";
+    }
   }
 }
