@@ -1,4 +1,4 @@
-package learning.web.springboot.service;
+package learning.springboot.web.service;
 
 import org.springframework.stereotype.Service;
 

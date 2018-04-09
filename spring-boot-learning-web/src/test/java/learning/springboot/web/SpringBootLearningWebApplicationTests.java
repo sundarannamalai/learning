@@ -1,4 +1,4 @@
-package learning.web.springboot;
+package learning.springboot.web;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
