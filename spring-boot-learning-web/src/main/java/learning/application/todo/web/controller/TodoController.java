@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * Created by
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Time: 9:58 PM
  */
 @Controller
+@SessionAttributes("name")
 public class TodoController {
 
   @Autowired
@@ -22,7 +24,7 @@ public class TodoController {
 
   @RequestMapping(value = "/list-todos", method = RequestMethod.GET)
   public String listTodos(ModelMap modelMap) {
-    modelMap.put("todoList", todoService.getTodoList("Sundar"));
+    modelMap.put("todoList", todoService.getTodoList((String)modelMap.get("name")));
     return "list-todos";
   }
 }
