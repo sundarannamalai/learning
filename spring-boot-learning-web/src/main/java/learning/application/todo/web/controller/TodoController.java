@@ -5,11 +5,13 @@ import learning.application.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import javax.validation.Valid;
 import java.util.Date;
 
 /**
@@ -34,12 +36,23 @@ public class TodoController {
 
   @RequestMapping(value = "/add-todo", method = RequestMethod.GET)
   public String showAddTodo(ModelMap modelMap) {
+    modelMap.addAttribute("todo", new Todo(0, "", (String) modelMap.get("user"), new Date(), false));
     return "todo";
   }
 
   @RequestMapping(value = "/add-todo", method = RequestMethod.POST)
-  public String addTodo(ModelMap modelMap, @RequestParam(name = "todo-description") String description) {
-    todoService.addTodo(description, (String) modelMap.get("name"), new Date(), false);
+  public String addTodo(ModelMap modelMap, @Valid Todo todo, BindingResult result) {
+    if(result.hasErrors()) {
+      return "todo";
+    }
+    todoService.addTodo(todo.getDescription(), (String) modelMap.get("name"), new Date(), false);
     return "redirect:/list-todos";
   }
+
+  @RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
+  public String deleteTodo(@RequestParam(name = "id") int id) {
+    todoService.deleteTodo(id);
+    return "redirect:/list-todos";
+  }
+
 }

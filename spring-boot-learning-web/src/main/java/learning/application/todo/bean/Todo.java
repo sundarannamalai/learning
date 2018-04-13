@@ -1,5 +1,6 @@
 package learning.application.todo.bean;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -11,12 +12,15 @@ import java.util.Date;
  */
 public class Todo {
   private int id;
+
+  @Size(min = 10, message = "Enter at least 10 characters")
   private String description;
   private String user;
   private Date targetDate;
   private boolean completed;
 
   public Todo() {
+    super();
   }
 
   public Todo(int id, String description, String user, Date targetDate, boolean completed) {
