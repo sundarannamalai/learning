@@ -4,7 +4,8 @@ import learning.application.todo.bean.Todo;
 import learning.application.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.format.datetime.DateFormatter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -23,11 +24,14 @@ import java.util.Date;
  * Time: 9:58 PM
  */
 @Controller
-@SessionAttributes("name")
 public class TodoController {
 
+  private final TodoService todoService;
+
   @Autowired
-  TodoService todoService;
+  public TodoController(TodoService todoService) {
+    this.todoService = todoService;
+  }
 
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -37,15 +41,23 @@ public class TodoController {
 
   @RequestMapping(value = "/list-todos", method = RequestMethod.GET)
   public String listTodos(ModelMap modelMap) {
-    modelMap.put("todoList", todoService.getTodoList((String)modelMap.get("name")));
+    modelMap.put("todoList", todoService.getTodoList(getLoggedInUsername()));
     return "list-todos";
   }
 
   @RequestMapping(value = "/add-todo", method = RequestMethod.GET)
   public String showAddTodo(ModelMap modelMap) {
-    modelMap.addAttribute("todo", new Todo(0, "", (String) modelMap.get("user"), new Date(), false));
+    modelMap.addAttribute("todo", new Todo(0, "", getLoggedInUsername(), new Date(), false));
     //return the view
     return "todo";
+  }
+
+  private String getLoggedInUsername() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if(principal instanceof UserDetails) {
+      return ((UserDetails)principal).getUsername();
+    }
+    return principal.toString();
   }
 
   @RequestMapping(value = "/add-todo", method = RequestMethod.POST)
@@ -53,7 +65,7 @@ public class TodoController {
     if(result.hasErrors()) {
       return "todo";
     }
-    todoService.addTodo(todo.getDescription(), (String) modelMap.get("name"), new Date(), false);
+    todoService.addTodo(todo.getDescription(), getLoggedInUsername(), new Date(), false);
     //redirect to url
     return "redirect:/list-todos";
   }
@@ -70,13 +82,16 @@ public class TodoController {
     if(result.hasErrors()) {
       return "todo";
     }
-    todo.setUser((String)modelMap.get("name"));
+    todo.setUser(getLoggedInUsername());
     todoService.updateTodo(todo);
     return "redirect:/list-todos";
   }
 
   @RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
   public String deleteTodo(@RequestParam(name = "id") int id) {
+    if(id == 1) {
+      throw new RuntimeException("something failed");
+    }
     todoService.deleteTodo(id);
     return "redirect:/list-todos";
   }

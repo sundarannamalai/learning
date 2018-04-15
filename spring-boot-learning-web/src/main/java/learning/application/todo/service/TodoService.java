@@ -26,9 +26,9 @@ public class TodoService {
   private static int count = 3;
 
   static {
-    todoList.add(new Todo(1, "Udemy course about Spring boot", "Sundar", Date.from(Instant.now()), false));
-    todoList.add(new Todo(2, "Learn Telugu", "Sundar", Date.from(Instant.now().plus(1, ChronoUnit.DAYS)), false));
-    todoList.add(new Todo(3, "Read Kindle", "Sundar", Date.from(Instant.now().plus(2, ChronoUnit.DAYS)), false));
+    todoList.add(new Todo(1, "Udemy course about Spring boot - Delete you get error", "learn", Date.from(Instant.now()), false));
+    todoList.add(new Todo(2, "Learn Telugu", "learn", Date.from(Instant.now().plus(1, ChronoUnit.DAYS)), false));
+    todoList.add(new Todo(3, "Read Kindle", "learn", Date.from(Instant.now().plus(2, ChronoUnit.DAYS)), false));
   }
 
   public List<Todo> getTodoList(String user) {
