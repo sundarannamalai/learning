@@ -1,4 +1,4 @@
-package learning.web.service.survey.model;
+package learning.webservice.survey.model;
 
 import java.util.List;
 

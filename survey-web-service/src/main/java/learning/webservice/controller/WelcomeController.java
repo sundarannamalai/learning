@@ -1,4 +1,4 @@
-package learning.web.service.controller;
+package learning.webservice.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
