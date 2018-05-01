@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by
@@ -22,10 +25,23 @@ import java.util.List;
 public class SurveyController {
 
   private SurveyService surveyService;
+  private AppConfiguration configuration;
 
   @Autowired
-  public SurveyController(SurveyService surveyService) {
+  public SurveyController(SurveyService surveyService, AppConfiguration configuration) {
     this.surveyService = surveyService;
+    this.configuration = configuration;
+  }
+
+  @GetMapping("/surveys/info")
+  public Map info() {
+    Map info = new LinkedHashMap<>();
+    info.put("name", configuration.getName());
+    info.put("description", configuration.getDescription());
+    info.put("author", configuration.getAuthor());
+    info.put("version", configuration.getVersion());
+    info.put("Date", new Date());
+    return info;
   }
 
   @GetMapping("/surveys")
