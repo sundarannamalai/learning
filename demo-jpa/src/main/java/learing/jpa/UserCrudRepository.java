@@ -1,7 +1,12 @@
 package learing.jpa;
 
 import learing.jpa.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
+
+import java.util.List;
 
 /**
  * Created by
@@ -10,5 +15,8 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 01/05/18
  * Time: 2:10 PM
  */
-public interface UserCrudRepository extends CrudRepository<User, Long> {
+@RepositoryRestResource(path = "users", collectionResourceRel = "users")
+public interface UserCrudRepository extends PagingAndSortingRepository<User, Long> {
+	@RestResource(path = "/byRole")
+	List<User> findByRole(@Param("role") String role);
 }

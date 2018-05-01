@@ -32,5 +32,8 @@ public class UserCommandLineRunner implements CommandLineRunner {
 		repository.save(new User("learn2", "User"));
 
 		repository.findAll().forEach(user -> LOGGER.info(user.toString()));
+
+		LOGGER.info("Admin users list....");
+		repository.findByRole("Admin").forEach(user -> LOGGER.info(user.toString()));
 	}
 }
