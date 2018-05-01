@@ -1,6 +1,8 @@
 package learning.webservice.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +22,11 @@ public class WelcomeController {
   @GetMapping("/welcome")
   public String welcome() {
     return message;
+  }
+
+  @Profile("dev")
+  @Bean
+  private String dummy() {
+    return "something else";
   }
 }
