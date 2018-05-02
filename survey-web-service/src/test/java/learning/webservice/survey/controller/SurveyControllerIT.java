@@ -13,6 +13,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Base64;
+
 /**
  * Created by
  * <p>
@@ -33,6 +35,8 @@ public class SurveyControllerIT {
 	@Test
 	public void test_Retrieve_A_Survey_Question() throws JSONException {
 		HttpHeaders headers = new HttpHeaders();
+		String base64Creds = Base64.getEncoder().encodeToString("surveyuser:suser123".getBytes());
+		headers.set("Authorization", "Basic " + base64Creds);
 		headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
 		HttpEntity entity = new HttpEntity<String>(null, headers);
 		ResponseEntity<String> responseEntity = testRestTemplate.exchange("http://localhost:" + port + "/surveys/Survey1/questions/Question1", HttpMethod.GET, entity, String.class);
