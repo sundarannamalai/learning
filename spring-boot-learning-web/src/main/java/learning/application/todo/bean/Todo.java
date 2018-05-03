@@ -1,5 +1,9 @@
 package learning.application.todo.bean;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Objects;
@@ -11,88 +15,99 @@ import java.util.Objects;
  * Date: 09/04/18
  * Time: 9:27 PM
  */
+@Entity
 public class Todo {
-  private int id;
 
-  @Size(min = 10, message = "Enter at least 10 characters")
-  private String description;
-  private String user;
-  private Date targetDate;
-  private boolean completed;
+	@Id
+	@GeneratedValue
+	private int id;
 
-  public Todo() {
-    super();
-  }
+	@Size(min = 10, message = "Enter at least 10 characters")
+	private String description;
+	private String user;
+	private Date targetDate;
+	private boolean completed;
 
-  public Todo(int id, String description, String user, Date targetDate, boolean completed) {
-    this.id = id;
-    this.description = description;
-    this.user = user;
-    this.targetDate = targetDate;
-    this.completed = completed;
-  }
+	public Todo() {
+		super();
+	}
 
-  public int getId() {
-    return id;
-  }
+	public Todo(int id, String description, String user, Date targetDate, boolean completed) {
+		this.id = id;
+		this.description = description;
+		this.user = user;
+		this.targetDate = targetDate;
+		this.completed = completed;
+	}
 
-  public void setId(int id) {
-    this.id = id;
-  }
+	public Todo(String description, String user, Date targetDate, boolean completed) {
+		this.description = description;
+		this.user = user;
+		this.targetDate = targetDate;
+		this.completed = completed;
+	}
 
-  public String getDescription() {
-    return description;
-  }
+	public int getId() {
+		return id;
+	}
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-  public String getUser() {
-    return user;
-  }
+	public String getDescription() {
+		return description;
+	}
 
-  public void setUser(String user) {
-    this.user = user;
-  }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-  public Date getTargetDate() {
-    return targetDate;
-  }
+	public String getUser() {
+		return user;
+	}
 
-  public void setTargetDate(Date targetDate) {
-    this.targetDate = targetDate;
-  }
+	public void setUser(String user) {
+		this.user = user;
+	}
 
-  public boolean isCompleted() {
-    return completed;
-  }
+	public Date getTargetDate() {
+		return targetDate;
+	}
 
-  public void setCompleted(boolean completed) {
-    this.completed = completed;
-  }
+	public void setTargetDate(Date targetDate) {
+		this.targetDate = targetDate;
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Todo todo = (Todo) o;
-    return id == todo.id;
-  }
+	public boolean isCompleted() {
+		return completed;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
 
-  @Override
-  public String toString() {
-    return "Todo{" +
-        "id=" + id +
-        ", description='" + description + '\'' +
-        ", user='" + user + '\'' +
-        ", targetDate=" + targetDate +
-        ", completed=" + completed +
-        '}';
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Todo todo = (Todo) o;
+		return id == todo.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public String toString() {
+		return "Todo{" +
+				"id=" + id +
+				", description='" + description + '\'' +
+				", user='" + user + '\'' +
+				", targetDate=" + targetDate +
+				", completed=" + completed +
+				'}';
+	}
 }

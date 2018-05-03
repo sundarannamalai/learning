@@ -18,21 +18,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class TodoSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  public void conifgureGlobalSecurity(AuthenticationManagerBuilder authBuilder) throws Exception {
-    authBuilder
-        .inMemoryAuthentication()
-        .withUser("learn")
-        .password("{noop}lrn123")
-        .roles("USER", "ADMIN")
-    ;
-  }
+	@Autowired
+	public void conifgureGlobalSecurity(AuthenticationManagerBuilder authBuilder) throws Exception {
+		authBuilder
+				.inMemoryAuthentication()
+				.withUser("learn")
+				.password("{noop}lrn123")
+				.roles("USER", "ADMIN")
+		;
+	}
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().antMatchers("/login")
-        .permitAll()
-        .antMatchers("/", "/*todo*/**").access("hasRole('USER')").and()
-        .formLogin();
-  }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/login", "/h2-console/**")
+				.permitAll()
+				.antMatchers("/", "/*todo*/**").access("hasRole('USER')").and()
+				.formLogin();
+		http.csrf().disable();
+		http.headers().frameOptions().disable();
+	}
 }

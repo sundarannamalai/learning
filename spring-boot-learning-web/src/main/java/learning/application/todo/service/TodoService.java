@@ -1,6 +1,7 @@
 package learning.application.todo.service;
 
 import learning.application.todo.bean.Todo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,36 +23,33 @@ import java.util.stream.Collectors;
 @Service
 public class TodoService {
 
-  private static List<Todo> todoList = new ArrayList<>();
-  private static int count = 3;
+	@Autowired
+	private TodoRepository repository;
 
+/*
   static {
     todoList.add(new Todo(1, "Udemy course about Spring boot - Delete you get error", "learn", Date.from(Instant.now()), false));
     todoList.add(new Todo(2, "Learn Telugu", "learn", Date.from(Instant.now().plus(1, ChronoUnit.DAYS)), false));
     todoList.add(new Todo(3, "Read Kindle", "learn", Date.from(Instant.now().plus(2, ChronoUnit.DAYS)), false));
-  }
+  }*/
 
-  public List<Todo> getTodoList(String user) {
-    return todoList.stream().filter(todo -> todo.getUser().equalsIgnoreCase(user)).collect(Collectors.toList());
-  }
+	public List<Todo> getTodoList(String user) {
+		return repository.findByUser(user);
+	}
 
-  public void addTodo(String description, String user, Date date, boolean completed) {
-    todoList.add(new Todo(++count, description, user, date, completed));
-  }
+	public void addTodo(String description, String user, Date date, boolean completed) {
+		repository.save(new Todo(description, user, date, completed));
+	}
 
-  public void deleteTodo(int id) {
-    todoList.removeIf((Todo todo) -> todo.getId() == id);
-  }
+	public void deleteTodo(int id) {
+  	repository.deleteById(id);
+	}
 
-  public Todo getTodo(int id) {
-    return todoList.stream().
-        filter((Todo todo) -> todo.getId() == id).
-        findFirst().
-        orElse(null);
-  }
+	public Todo getTodo(int id) {
+		return repository.findById(id).orElse(null);
+	}
 
-  public void updateTodo(Todo todo) {
-    todoList.remove(todo);
-    todoList.add(todo);
-  }
+	public void updateTodo(Todo todo) {
+		repository.save(todo);
+	}
 }
