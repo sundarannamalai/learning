@@ -21,25 +21,25 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 public class WelcomeController {
 
-	@Value("${welcome.message}")
-	private String message;
+  @Value("${welcome.message}")
+  private String message;
 
-	@Autowired
-	private MessageSource messageSource;
+  @Autowired
+  private MessageSource messageSource;
 
-	@GetMapping("/welcome")
-	public String welcome() {
-		return message;
-	}
+  @GetMapping("/welcome")
+  public String welcome() {
+    return message;
+  }
 
-	@GetMapping("/say-goodmorning")
-	public String sayGoodMorningInternationalized() {
-		return messageSource.getMessage("goodmorning.welcome.message", null, LocaleContextHolder.getLocale());
-	}
+  @GetMapping("/say-goodmorning")
+  public String sayGoodMorningInternationalized() {
+    return messageSource.getMessage("goodmorning.welcome.message", null, LocaleContextHolder.getLocale());
+  }
 
-	@Profile("dev")
-	@Bean
-	private String dummy() {
-		return "something else";
-	}
+  @Profile("dev")
+  @Bean
+  private String dummy() {
+    return "something else";
+  }
 }

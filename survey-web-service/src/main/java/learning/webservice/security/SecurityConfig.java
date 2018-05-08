@@ -16,23 +16,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	public void conifgureGlobalSecurity(AuthenticationManagerBuilder authBuilder) throws Exception {
-		authBuilder
-				.inMemoryAuthentication()
-				.withUser("surveyuser").password("{noop}suser123").roles("USER")
-				.and()
-				.withUser("surveyadmin").password("{noop}sadmin123").roles("USER", "ADMIN");
+  @Autowired
+  public void conifgureGlobalSecurity(AuthenticationManagerBuilder authBuilder) throws Exception {
+    authBuilder
+        .inMemoryAuthentication()
+        .withUser("surveyuser").password("{noop}suser123").roles("USER")
+        .and()
+        .withUser("surveyadmin").password("{noop}sadmin123").roles("USER", "ADMIN");
 
-		;
-	}
+    ;
+  }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().and().authorizeRequests()
-				.antMatchers("/surveys/**").hasRole("USER")
-				.antMatchers("/**").hasRole("ADMIN")
-				.and().csrf().disable()
-				.headers().frameOptions().disable();
-	}
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic().and().authorizeRequests()
+        .antMatchers("/surveys/**").hasRole("USER")
+        .antMatchers("/**").hasRole("ADMIN")
+        .and().csrf().disable()
+        .headers().frameOptions().disable();
+  }
 }

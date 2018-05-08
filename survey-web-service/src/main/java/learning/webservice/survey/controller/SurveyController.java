@@ -14,6 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
 /**
  * Created by
  * <p>
@@ -24,49 +26,58 @@ import java.util.Map;
 @RestController
 public class SurveyController {
 
-	private SurveyService surveyService;
-	private AppConfiguration configuration;
+  private SurveyService surveyService;
+  private AppConfiguration configuration;
 
-	@Autowired
-	public SurveyController(SurveyService surveyService, AppConfiguration configuration) {
-		this.surveyService = surveyService;
-		this.configuration = configuration;
-	}
+  @Autowired
+  public SurveyController(SurveyService surveyService, AppConfiguration configuration) {
+    this.surveyService = surveyService;
+    this.configuration = configuration;
+  }
 
-	@GetMapping("/surveys/info")
-	public Map info() {
-		Map info = new LinkedHashMap<>();
-		info.put("name", configuration.getName());
-		info.put("description", configuration.getDescription());
-		info.put("author", configuration.getAuthor());
-		info.put("version", configuration.getVersion());
-		info.put("Date", new Date());
-		return info;
-	}
+  @GetMapping("/surveys/info")
+  public Map info() {
+    Map info = new LinkedHashMap<>();
+    info.put("name", configuration.getName());
+    info.put("description", configuration.getDescription());
+    info.put("author", configuration.getAuthor());
+    info.put("version", configuration.getVersion());
+    info.put("Date", new Date());
+    return info;
+  }
 
-	@GetMapping("/surveys")
-	public List<Survey> retrieveAllSurveys() {
-		return surveyService.retrieveAllSurveys();
-	}
+  @GetMapping("/surveys")
+  public List<Survey> retrieveAllSurveys() {
+    return surveyService.retrieveAllSurveys();
+  }
 
-	@GetMapping("/surveys/{surveyId}/questions")
-	public List<Question> retrieveQuestions(@PathVariable String surveyId) {
-		return surveyService.retrieveQuestions(surveyId);
-	}
+  @GetMapping("/surveys/{surveyId}/questions")
+  public List<Question> retrieveQuestions(@PathVariable String surveyId) {
+    List<Question> questions = surveyService.retrieveQuestions(surveyId);
+    questions.forEach(question -> {
+      question.add(linkTo(
+          methodOn(SurveyController.class)
+              .retrieveQuestion(surveyId, question.getQId())).withRel("self").withType("GET"));
+      question.add(linkTo(
+          methodOn(SurveyController.class)
+              .addQuestion(surveyId, new Question())).withRel("question").withType("POST"));
+    });
+    return questions;
+  }
 
-	@PostMapping("/surveys/{surveyId}/questions")
-	public ResponseEntity<?> addQuestion(@PathVariable String surveyId, @RequestBody Question question) {
-		Question created = surveyService.addQuestion(surveyId, question);
-		if (created == null) {
-			return ResponseEntity.noContent().build();
-		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(created.getId()).toUri();
-		return ResponseEntity.created(location).build();
-	}
+  @PostMapping("/surveys/{surveyId}/questions")
+  public ResponseEntity<?> addQuestion(@PathVariable String surveyId, @RequestBody Question question) {
+    Question created = surveyService.addQuestion(surveyId, question);
+    if (created == null) {
+      return ResponseEntity.noContent().build();
+    }
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}").buildAndExpand(created.getQId()).toUri();
+    return ResponseEntity.created(location).build();
+  }
 
-	@GetMapping("/surveys/{surveyId}/questions/{questionId}")
-	public Question retrieveQuestion(@PathVariable String surveyId, @PathVariable String questionId) {
-		return surveyService.retrieveQuestion(surveyId, questionId);
-	}
+  @GetMapping("/surveys/{surveyId}/questions/{questionId}")
+  public Question retrieveQuestion(@PathVariable String surveyId, @PathVariable String questionId) {
+    return surveyService.retrieveQuestion(surveyId, questionId);
+  }
 }
