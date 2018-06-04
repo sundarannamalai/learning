@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Date: 02/06/18
  * Time: 10:57 PM
  */
-@FeignClient(name = "currency-exchange-service")
+@FeignClient(name = "netflix-zuul-api-gateway-server")
 @RibbonClient(name = "currency-exchange-service")
 public interface CurrencyExchangeServiceProxy {
 
-  @GetMapping("/currency-exchange/from/{from}/to/{to}")
+  @GetMapping("/currency-exchange-service/currency-exchange/from/{from}/to/{to}")
   ConvertedValue exchangeValue(@PathVariable("from") String from, @PathVariable("to") String to);
 }
