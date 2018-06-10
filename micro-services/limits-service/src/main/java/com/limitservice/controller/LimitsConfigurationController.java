@@ -2,6 +2,7 @@ package com.limitservice.controller;
 
 import com.limitservice.bean.LimitConfiguration;
 import com.limitservice.config.Configuration;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,4 +28,16 @@ public class LimitsConfigurationController {
   public LimitConfiguration retrieveLimits() {
     return new LimitConfiguration(configuration.getMax(), configuration.getMin());
   }
+
+  @GetMapping("/hystrix-config")
+  @HystrixCommand(fallbackMethod = "defaultConfig")
+  public LimitConfiguration getConfig() {
+    throw new UnsupportedOperationException("Not yet implemented!");
+  }
+
+  public LimitConfiguration defaultConfig() {
+    return new LimitConfiguration(1000, 10);
+  }
+
+
 }
