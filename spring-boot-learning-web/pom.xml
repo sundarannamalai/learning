@@ -95,12 +95,13 @@
                     <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
-                        <version>1.4.0</version>
+                        <version>1.4.13</version>
                         <executions>
                             <execution>
                                 <id>default</id>
                                 <goals>
                                     <goal>build</goal>
+                                    <goal>tag</goal>
                                     <goal>push</goal>
                                 </goals>
                             </execution>
@@ -111,10 +112,20 @@
                             <buildArgs>
                                 <JAR_FILE>target/${project.build.finalName}.war</JAR_FILE>
                             </buildArgs>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                            <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Internal Repository</name>
+            <uniqueVersion>true</uniqueVersion>
+            <url>file:///var/maven/repo</url>
+        </repository>
+    </distributionManagement>
 </project>

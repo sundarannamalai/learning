@@ -1,4 +1,5 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jre
+MAINTAINER Sundar Annamalai <sundarannamalai@gmail.com>
 
 VOLUME /tmp
 

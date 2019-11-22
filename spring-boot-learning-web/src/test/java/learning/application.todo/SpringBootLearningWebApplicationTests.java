@@ -1,4 +1,4 @@
-package learning.springboot.web;
+package learning.application.todo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
